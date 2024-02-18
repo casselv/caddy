@@ -7,6 +7,10 @@ root * /srv
 }
 header @wasm Content-Type application/wasm
 
-encode gzip
-file_server
+@wasmGz {
+    path *.wasm.gz
+}
+header @wasmGz Content-Type application/wasm
+header @wasmGz Content-Encoding gzip
 
+file_server
