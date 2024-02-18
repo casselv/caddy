@@ -1,7 +1,12 @@
 :{$PORT}
 
 root * /srv
+
+@wasm {
+    path *.wasm
+}
+header @wasm Content-Type application/wasm
+
 encode gzip
 file_server
-
 
