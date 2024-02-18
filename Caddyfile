@@ -2,3 +2,5 @@
 
 root * /srv
 file_server
+encode gzip
+
