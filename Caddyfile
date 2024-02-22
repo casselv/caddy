@@ -2,15 +2,17 @@
 
 root * /srv
 
+# Handle .wasm files
 @wasm {
     path *.wasm
 }
 header @wasm Content-Type application/wasm
 
-@wasmGz {
-    path *.wasm.gz
+# General handler for .gz files
+@gz {
+    path *.gz
 }
-header @wasmGz Content-Type application/wasm
-header @wasmGz Content-Encoding gzip
+header @gz Content-Encoding gzip
 
+# Serve files
 file_server
