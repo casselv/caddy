@@ -16,3 +16,10 @@ header @gz Content-Encoding gzip
 
 # Serve files
 file_server
+
+@notFile {
+    not path /favicon.ico
+    not file
+}
+rewrite @notFile /index.html
+
