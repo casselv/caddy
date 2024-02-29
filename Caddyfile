@@ -12,7 +12,7 @@ header @wasm Content-Type application/wasm
 @gz {
     path *.gz
 }
-header @gz Content-Encoding gzip
+header @gz Content-Encoding gzip 
 
 # Serve files
 file_server
