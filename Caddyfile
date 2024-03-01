@@ -3,12 +3,13 @@
 root * /srv
 
 # Handle compressed WebAssembly files (.wasm.gz)
+# This assumes .wasm.gz files are stored pre-compressed and should be served directly
+# with the correct Content-Encoding and Content-Type headers.
 @compressedWasm {
     path *.wasm.gz
 }
 header @compressedWasm Content-Encoding gzip
 header @compressedWasm Content-Type application/wasm
-rewrite @compressedWasm {http.request.uri.path}.gz
 
 # Handle uncompressed WebAssembly files (.wasm)
 @wasm {
@@ -16,15 +17,19 @@ rewrite @compressedWasm {http.request.uri.path}.gz
 }
 header @wasm Content-Type application/wasm
 
-# General handler for .gz files (excluding .wasm.gz which is handled above)
+# General handler for other .gz files (excluding .wasm.gz)
 @gz {
     path *.gz
     not path *.wasm.gz
 }
-header @gz Content-Encoding gzip 
+header @gz Content-Encoding gzip
+header @gz Content-Type application/octet-stream
 
 # Serve files
-file_server
+file_server {
+    # Ensure that pre-compressed files are served when available
+    precompressed gzip
+}
 
 @notFile {
     not path /favicon.ico
