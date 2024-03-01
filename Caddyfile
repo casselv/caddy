@@ -2,15 +2,24 @@
 
 root * /srv
 
-# Handle .wasm files
+# Handle compressed WebAssembly files (.wasm.gz)
+@compressedWasm {
+    path *.wasm.gz
+}
+header @compressedWasm Content-Encoding gzip
+header @compressedWasm Content-Type application/wasm
+rewrite @compressedWasm {http.request.uri.path}.gz
+
+# Handle uncompressed WebAssembly files (.wasm)
 @wasm {
     path *.wasm
 }
 header @wasm Content-Type application/wasm
 
-# General handler for .gz files
+# General handler for .gz files (excluding .wasm.gz which is handled above)
 @gz {
     path *.gz
+    not path *.wasm.gz
 }
 header @gz Content-Encoding gzip 
 
@@ -22,4 +31,3 @@ file_server
     not file
 }
 rewrite @notFile /index.html
-
